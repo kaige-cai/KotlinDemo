@@ -1,3 +1,5 @@
 fun main(args: Array<String>) {
-    println(args.toList())
+    for (i in args) {
+        println(i)
+    }
 }
