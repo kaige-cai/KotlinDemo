@@ -1,34 +1,35 @@
+import java.awt.FileDialog
+import java.awt.Frame
 import java.io.File
-import javax.swing.JFileChooser
-import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
 fun main() {
-    val fileChooser = JFileChooser()
-    val filter = FileNameExtensionFilter("Text Files", "txt")
-    fileChooser.fileFilter = filter
+    val fileDialog = FileDialog(null as Frame?, "选择文本文件", FileDialog.LOAD)
+    fileDialog.file = "*.txt"
+    fileDialog.isVisible = true
 
-    val result = fileChooser.showOpenDialog(null)
-
-    if (result == JFileChooser.APPROVE_OPTION) {
-        val selectedFile = fileChooser.selectedFile
-        val selectedFilePath = selectedFile.absolutePath
-        println("Selected file path: $selectedFilePath")
-
-        val content = selectedFile.readText()
-        val outputDirectory = selectedFile.parentFile
-
-        val chunks = splitTextIntoChunks(content, 3000)
-
-        chunks.forEachIndexed { index, chunk ->
-            val outputFileName = "temp$index.txt"
-            val outputFile = File(outputDirectory, outputFileName)
-            outputFile.writeText(chunk)
-        }
-
-        println("Text split and saved into ${chunks.size} files.")
+    if (fileDialog.file == null) {
+        println("操作被取消，未选择任何文件。")
         exitProcess(0)
     }
+
+    val selectedFile = File(fileDialog.directory, fileDialog.file)
+    val selectedFilePath = selectedFile.absolutePath
+    println("选择的文件路径: $selectedFilePath")
+
+    val content = selectedFile.readText()
+    val outputDirectory = selectedFile.parentFile
+
+    val chunks = splitTextIntoChunks(content, 3000)
+
+    chunks.forEachIndexed { index, chunk ->
+        val outputFileName = "temp$index.txt"
+        val outputFile = File(outputDirectory, outputFileName)
+        outputFile.writeText(chunk)
+    }
+
+    println("文本已分割并保存为${chunks.size}个文件")
+    exitProcess(0)
 }
 
 fun splitTextIntoChunks(text: String, chunkSize: Int): List<String> {

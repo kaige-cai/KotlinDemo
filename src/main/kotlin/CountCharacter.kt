@@ -1,6 +1,6 @@
+import java.awt.FileDialog
+import java.awt.Frame
 import java.io.File
-import javax.swing.JFileChooser
-import javax.swing.filechooser.FileNameExtensionFilter
 
 fun main() {
     val selectedFilePath = chooseFile()
@@ -16,12 +16,12 @@ fun main() {
         when (option) {
             1 -> {
                 val chineseCharacterCount = countChineseCharacters(text)
-                println("总中文字符数量(不包括标点和空格)：$chineseCharacterCount")
+                println("总中文字符数量（不包括标点和空格）：$chineseCharacterCount")
             }
 
             2 -> {
                 val characterCount = text.length
-                println("总字符数量(包括标点和空格)：$characterCount")
+                println("总字符数量（包括标点和空格）：$characterCount")
             }
 
             else -> println("选择无效。")
@@ -30,17 +30,14 @@ fun main() {
 }
 
 fun chooseFile(): String? {
-    val fileChooser = JFileChooser()
-    val filter = FileNameExtensionFilter("Text Files", "txt")
-    fileChooser.fileFilter = filter
-    val result = fileChooser.showOpenDialog(null)
+    val fileDialog = FileDialog(null as Frame?, "选择文本文件", FileDialog.LOAD)
+    fileDialog.isVisible = true
 
-    if (result == JFileChooser.APPROVE_OPTION) {
-        val selectedFile = fileChooser.selectedFile
-        return selectedFile.absolutePath
+    val selectedFile = File(fileDialog.directory, fileDialog.file)
+    return when {
+        selectedFile.exists() -> selectedFile.absolutePath
+        else -> null
     }
-
-    return null
 }
 
 fun readFile(filePath: String): String {
