@@ -20,4 +20,3 @@ fun main() {
         print("$i ")
     }
 }
-

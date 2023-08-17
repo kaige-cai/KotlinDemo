@@ -11,8 +11,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.openjfx:javafx-controls:17")
-    implementation("org.openjfx:javafx-fxml:17")
     testImplementation(kotlin("test"))
 }
 
