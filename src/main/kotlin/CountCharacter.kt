@@ -4,13 +4,13 @@ import java.io.File
 
 fun main() {
     val selectedFilePath = chooseFile()
-
     if (selectedFilePath != null) {
         val text = readFile(selectedFilePath)
 
         println("请选择一个选项：")
         println("1. 统计中文字符数量（排除标点和空格）")
         println("2. 统计所有字符数量（包括标点和空格）")
+        println("3. 统计指定单词出现的次数")
         val option = readlnOrNull()?.toInt()
 
         when (option) {
@@ -22,6 +22,15 @@ fun main() {
             2 -> {
                 val characterCount = text.length
                 println("总字符数量（包括标点和空格）：$characterCount")
+            }
+
+            3 -> {
+                println("请输入要统计出现次数的单词：")
+                val word = readlnOrNull()
+                if (word != null) {
+                    val wordCount = countWordOccurrences(text, word)
+                    println("\"$word\" 出现的次数：$wordCount")
+                }
             }
 
             else -> println("选择无效。")
@@ -54,3 +63,11 @@ fun countChineseCharacters(text: String): Int {
     val matches = Regex(regex).findAll(chineseCharacters)
     return matches.sumOf { it.value.length }
 }
+
+fun countWordOccurrences(text: String, word: String): Int {
+    val regex = Regex(word)
+    val matches = regex.findAll(text)
+    return matches.count()
+}
+
+
