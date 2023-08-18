@@ -29,7 +29,7 @@ fun main() {
                 val word = readlnOrNull()
                 if (word != null) {
                     val wordCount = countWordOccurrences(text, word)
-                    println("\"$word\" 出现的次数：$wordCount")
+                    println("${word}出现的次数：$wordCount")
                 }
             }
 
@@ -69,5 +69,3 @@ fun countWordOccurrences(text: String, word: String): Int {
     val matches = regex.findAll(text)
     return matches.count()
 }
-
-
