@@ -6,16 +6,19 @@ import javax.imageio.ImageIO
 
 fun main() {
     val sourceIconPath = chooseSourceIcon() ?: return
-    val targetIconPath = chooseTargetIcon() ?: return
+    val targetIconPaths = chooseTargetIcons() ?: return
 
-    val sizes = readImageSizesFromFile(targetIconPath)
+    for (targetIconPath in targetIconPaths) {
+        val sizes = readImageSizesFromFile(targetIconPath)
 
-    for (size in sizes) {
-        val sizeValues = size.split("x").map { it.toInt() }
-        val scaledImage = scaleImage(sourceIconPath, sizeValues[0], sizeValues[1])
-        ImageIO.write(scaledImage, "png", File(targetIconPath))
+        for (size in sizes) {
+            val sizeValues = size.split("x").map { it.toInt() }
+            val scaledImage = scaleImage(sourceIconPath, sizeValues[0], sizeValues[1])
+            val outputImagePath = generateOutputPath(targetIconPath, size)
+            ImageIO.write(scaledImage, "png", File(outputImagePath))
 
-        println("Generated icon for size $size")
+            println("Generated icon for size $size")
+        }
     }
 
     println("Icons generated and saved.")
@@ -32,12 +35,13 @@ fun chooseSourceIcon(): String? {
     }
 }
 
-fun chooseTargetIcon(): String? {
-    val fileDialog = FileDialog(null as Frame?, "Choose Target Icon", FileDialog.LOAD)
+fun chooseTargetIcons(): List<String>? {
+    val fileDialog = FileDialog(null as Frame?, "Choose Target Icons", FileDialog.LOAD)
+    fileDialog.isMultipleMode = true
     fileDialog.isVisible = true
 
-    return if (fileDialog.file != null) {
-        File(fileDialog.directory, fileDialog.file).absolutePath
+    return if (fileDialog.files.isNotEmpty()) {
+        fileDialog.files.map { it.absolutePath }
     } else {
         null
     }
@@ -57,4 +61,11 @@ fun scaleImage(imagePath: String, width: Int, height: Int): BufferedImage {
     g2d.drawImage(sourceImage, 0, 0, width, height, null)
     g2d.dispose()
     return scaledImage
+}
+
+fun generateOutputPath(targetIconPath: String, size: String): String {
+    val targetDir = File(targetIconPath).parent
+    val targetFileName = File(targetIconPath).nameWithoutExtension
+    val extension = "png"
+    return "$targetDir${File.separator}$targetFileName-$size.$extension"
 }
