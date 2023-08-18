@@ -14,10 +14,10 @@ fun main() {
         for (size in sizes) {
             val sizeValues = size.split("x").map { it.toInt() }
             val scaledImage = scaleImage(sourceIconPath, sizeValues[0], sizeValues[1])
-            val outputImagePath = generateOutputPath(targetIconPath, size)
-            ImageIO.write(scaledImage, "png", File(outputImagePath))
+            val targetImageFile = File(targetIconPath)
+            overwriteImageWithScaled(targetImageFile, scaledImage)
 
-            println("Generated icon for size $size")
+            println("Generated icon for size $size and overwritten $targetIconPath")
         }
     }
 
@@ -63,9 +63,6 @@ fun scaleImage(imagePath: String, width: Int, height: Int): BufferedImage {
     return scaledImage
 }
 
-fun generateOutputPath(targetIconPath: String, size: String): String {
-    val targetDir = File(targetIconPath).parent
-    val targetFileName = File(targetIconPath).nameWithoutExtension
-    val extension = "png"
-    return "$targetDir${File.separator}$targetFileName-$size.$extension"
+fun overwriteImageWithScaled(imageFile: File, scaledImage: BufferedImage) {
+    ImageIO.write(scaledImage, "png", imageFile)
 }
