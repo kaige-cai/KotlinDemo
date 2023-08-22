@@ -4,6 +4,7 @@ import java.io.File
 import kotlin.system.exitProcess
 
 fun main() {
+    val chunkSize = readlnOrNull()?.toIntOrNull() ?: 3000
     val fileDialog = FileDialog(null as Frame?, "选择文本文件", FileDialog.LOAD)
     fileDialog.file = "*.txt"
     fileDialog.isVisible = true
@@ -20,7 +21,7 @@ fun main() {
     val content = selectedFile.readText()
     val outputDirectory = selectedFile.parentFile
 
-    val chunks = splitTextIntoChunks(content, 3000)
+    val chunks = splitTextIntoChunks(content, chunkSize)
 
     chunks.forEachIndexed { index, chunk ->
         val outputFileName = "temp$index.txt"
