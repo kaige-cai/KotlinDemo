@@ -4,6 +4,7 @@ import java.io.File
 import kotlin.system.exitProcess
 
 fun main() {
+    println("请输入要分割的字数：")
     val chunkSize = readlnOrNull()?.toIntOrNull() ?: 3000
     val fileDialog = FileDialog(null as Frame?, "选择文本文件", FileDialog.LOAD)
     fileDialog.file = "*.txt"
@@ -24,7 +25,7 @@ fun main() {
     val chunks = splitTextIntoChunks(content, chunkSize)
 
     chunks.forEachIndexed { index, chunk ->
-        val outputFileName = "temp$index.txt"
+        val outputFileName = "temp${index + 1}.txt"
         val outputFile = File(outputDirectory, outputFileName)
         outputFile.writeText(chunk)
     }
