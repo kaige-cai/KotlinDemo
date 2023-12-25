@@ -1,6 +1,9 @@
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 
 // 选择文件路径
 fun chooseDirectory(title: String): String? {
@@ -27,3 +30,9 @@ fun chooseFile(title: String): String? {
         null
     }
 }
+
+// 保存文件
+fun saveToFile(filePath: String, content: String) {
+    Files.write(Paths.get(filePath), content.toByteArray(), StandardOpenOption.CREATE)
+}
+
